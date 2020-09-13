@@ -191,22 +191,22 @@ void showGame(){
 	for (int i = 0; i < ROW; i++){
 		for (int j = 0; j < COL; j++){
 			switch (*(pMap + (i*COL) + j)){		//二维转一维
-			case wall: printf("#"); break;		//墙壁标识
-			case space: printf(" "); break;		//空白格子
+			case wall: printf("□"); break;		//墙壁标识
+			case space: printf("  "); break;		//空白格子
 			case snake:
 				if (i == list->next->pos.row && j == list->next->pos.col){
-					printf("$");		//蛇头标识
+					printf("○");		//蛇头标识
 					break;
 				}
 				if (i == temlast.row&&j == temlast.col){
-					printf("O");		//蛇尾标识
+					printf("△");		//蛇尾标识
 					break;
 				}
 				else{
-					printf("*");		//蛇身标识
+					printf("■");		//蛇身标识
 					break;
 				}
-			case food: printf("@"); break;		//食物标识
+			case food: printf("★"); break;		//食物标识
 			}
 		}
 		printf("\n");
