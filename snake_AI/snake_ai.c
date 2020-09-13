@@ -1,8 +1,7 @@
 #include <stdio.h>
-#include <stdlib.h>	//malloc()函数
-#include <stdbool.h>
-#include <conio.h>	//_kbhit()函数需要
-#include <windows.h>	//sleep()函数需要
+#include <stdlib.h>	
+#include <stdbool.h>	
+#include <windows.h>	
 #define ROW 12 		//地图高
 #define COL 12		//地图宽
 
