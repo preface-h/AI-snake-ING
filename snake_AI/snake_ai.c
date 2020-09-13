@@ -452,6 +452,8 @@ void ctrolGame(){
 			updataMap();
 		}
 		else{
+			printf("我吃食物了");
+			Sleep(10000);
 			insertNode(dir[max].row, dir[max].col);	//此方向点为食物，头插法插入一个结点到蛇里面
 			initFood();
 			updataMap();
