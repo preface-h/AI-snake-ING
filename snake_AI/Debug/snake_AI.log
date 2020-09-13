@@ -1,0 +1,22 @@
+﻿生成启动时间为 2020/9/13 15:38:24。
+     1>项目“F:\github\AI-snake-ING\snake_AI\snake_AI.vcxproj”在节点 2 上(Build 个目标)。
+     1>ClCompile:
+         D:\vs2013\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /analyze- /errorReport:prompt snake_ai.c
+         snake_ai.c
+     1>f:\github\ai-snake-ing\snake_ai\snake_ai.c(51): warning C4013: “time”未定义；假设外部返回 int
+     1>f:\github\ai-snake-ing\snake_ai\snake_ai.c(55): warning C4047: “=”:“int”与“void *”的间接级别不同
+     1>f:\github\ai-snake-ing\snake_ai\snake_ai.c(56): warning C4047: “=”:“int”与“void *”的间接级别不同
+     1>f:\github\ai-snake-ing\snake_ai\snake_ai.c(355): warning C4047: “=”:“int”与“void *”的间接级别不同
+     1>f:\github\ai-snake-ing\snake_ai\snake_ai.c(356): warning C4047: “=”:“int”与“void *”的间接级别不同
+     1>f:\github\ai-snake-ing\snake_ai\snake_ai.c(469): warning C4047: “=”:“int”与“void *”的间接级别不同
+     1>f:\github\ai-snake-ing\snake_ai\snake_ai.c(470): warning C4047: “=”:“int”与“void *”的间接级别不同
+     1>f:\github\ai-snake-ing\snake_ai\snake_ai.c(624): warning C4047: “=”:“int”与“void *”的间接级别不同
+     1>f:\github\ai-snake-ing\snake_ai\snake_ai.c(625): warning C4047: “=”:“int”与“void *”的间接级别不同
+       Link:
+         D:\vs2013\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"F:\github\AI-snake-ING\snake_AI\Debug\snake_AI.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"F:\github\AI-snake-ING\snake_AI\Debug\snake_AI.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"F:\github\AI-snake-ING\snake_AI\Debug\snake_AI.lib" /MACHINE:X86 Debug\snake_ai.obj
+         snake_AI.vcxproj -> F:\github\AI-snake-ING\snake_AI\Debug\snake_AI.exe
+     1>已完成生成项目“F:\github\AI-snake-ING\snake_AI\snake_AI.vcxproj”(Build 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:02.07

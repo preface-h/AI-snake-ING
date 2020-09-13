@@ -3,8 +3,8 @@
 #include <stdbool.h>
 #include <conio.h>	//_kbhit()函数需要
 #include <windows.h>	//sleep()函数需要
-#define ROW 22 		//地图高
-#define COL 22		//地图宽
+#define ROW 12 		//地图高
+#define COL 12		//地图宽
 
 //点类型，记录点的横纵坐标
 typedef struct Mypoint{
