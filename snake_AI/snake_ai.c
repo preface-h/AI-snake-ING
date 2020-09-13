@@ -1,4 +1,4 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <stdlib.h>	
 #include <stdbool.h>	
 #include <windows.h>	
@@ -100,7 +100,7 @@ void initFood(){
 		printf("win!!!");
 		while (1);
 	}
-	int suiji = rand() % index;	//随机产生食物，index为0的时候无法使用%
+	int suiji = rand() % index;	//在space中随机产生食物
 	Food[0].row = pBuff[suiji].row;
 	Food[0].col = pBuff[suiji].col;
 }
@@ -424,8 +424,8 @@ void ctrolGame(){
 					int i = *(number + n);
 					if (isWhat(dir[i].row, dir[i].col) == space){ //此时游戏已经输了，但为了能走完此时能走的点，选择让蛇往有space或food的方向移动
 						snake_move(dir[i].row, dir[i].col);
-						printf("虽然知道输了，但我还是要走完能走的点");
-						Sleep(5000);
+						//printf("虽然知道输了，但我还是要走完能走的点");
+						//Sleep(5000);
 						updataMap();
 					}
 					if (isWhat(dir[i].row, dir[i].col) == food){
@@ -437,7 +437,7 @@ void ctrolGame(){
 				isLive = false;
 				return;
 			}
-			else{
+			else{		//没有找到能到尾巴食物的方向点，但找到周围还有可走空间的方向点
 				max = backupmax;
 			}
 		}
@@ -451,8 +451,8 @@ void ctrolGame(){
 			updataMap();
 		}
 		else{
-			printf("我吃食物了");
-			Sleep(10000);
+			//printf("我吃食物了");
+			//Sleep(10000);
 			insertNode(dir[max].row, dir[max].col);	//此方向点为食物，头插法插入一个结点到蛇里面
 			initFood();
 			updataMap();
@@ -461,30 +461,28 @@ void ctrolGame(){
 }
 
 
-//AI实现的部分
+//判断虚拟蛇能否吃到食物，且吃完食物后能否找到尾巴
 bool vsnakeeat(){				//放出一条虚拟蛇去吃食物
 	int index = 0;				//虚拟蛇走过的点的数组下标
 	//生成虚拟蛇
-	snakeNode* vlist = NULL;		//用带头结点链表来描述虚拟蛇
+	snakeNode* vlist = NULL;	//用带头结点链表来描述虚拟蛇
 	struct SnakeNode* vhead = (struct SnakeNode*)malloc(sizeof(struct SnakeNode));
 	vhead->pos.row = NULL;
 	vhead->pos.col = NULL;
 	vhead->next = NULL;
 	vlist = vhead;
 	snakeNode* rear = vlist;		//虚拟蛇蛇尾
-
 	struct SnakeNode* tmp = list->next;
 	while (tmp != NULL){
 		vinsertNode(&vlist, &rear, tmp->pos.row, tmp->pos.col);
 		tmp = tmp->next;
 	}
 
-
 	//移动虚拟蛇去吃食物
 	Point vdir[4] = { 0 };			//存储虚拟蛇头的上下左右位置坐标的数组,0上  1右  2下  3左
-	while (visWhat(&vlist, vlist->next->pos.row, vlist->next->pos.col) != food){
-		int vfoodminH = ROW + COL;	//设置一个H值标志，默认为最大的H，以便找到四个方向中离食物最近的点
-		int vmin = -1;			//记录以找到的有最小H值的点，默认为-1，若vmin值未改变则证明未找到可走的点
+	while (visWhat(&vlist, vlist->next->pos.row, vlist->next->pos.col) != food){	//当虚拟蛇蛇头到达食物，终止循环
+		int vfoodminH = ROW + COL;	//设置一个vfoodminH值标志，默认为最大的值，以便找到四个方向中离食物最近的点
+		int vmin = -1;				//记录以找到的有最小vfoodminH值的方向点，设默认为-1，若vmin值未改变则证明未找到可走的点
 		int vsnakemaxH = -1;		//设置一个小的值，以便找到离蛇尾最大的方向点
 
 		//添加虚拟蛇头上右下左的坐标，即方向点
@@ -501,12 +499,12 @@ bool vsnakeeat(){				//放出一条虚拟蛇去吃食物
 		int *number = num();			//随机产生方向
 		for (int n = 0; n < 4; n++){
 			int i = *(number + n);
-			if ((vdir[i].row != rear->pos.row || vdir[i].col != rear->pos.col) && (visWhat(&vlist, vdir[i].row, vdir[i].col) == snake || visWhat(&vlist, vdir[i].row, vdir[i].col) == wall)){	//若该点不是虚拟蛇尾 且 是虚拟蛇身或墙 则跳过
+			if ((vdir[i].row != rear->pos.row || vdir[i].col != rear->pos.col) && (visWhat(&vlist, vdir[i].row, vdir[i].col) == snake || visWhat(&vlist, vdir[i].row, vdir[i].col) == wall)){	
 				//printf("跳过(%d,%d)", vdir[i].row, vdir[i].col);
 				//Sleep(5000);
-				continue;		//跳过不满足条件的方向点
+				continue;		//若该点不是虚拟蛇尾 且 是虚拟蛇身或墙 则跳过
 			}
-			int vfoodH = abs(vdir[i].row - Food[0].row) + abs(vdir[i].col - Food[0].col);			//计算该方向点到食物的H值
+			int vfoodH = abs(vdir[i].row - Food[0].row) + abs(vdir[i].col - Food[0].col);			//计算该方向点到食物的曼哈顿距离H值
 
 			if (vfoodH < vfoodminH){
 				vfoodminH = vfoodH;	//找出离食物最近的方向点
@@ -519,63 +517,51 @@ bool vsnakeeat(){				//放出一条虚拟蛇去吃食物
 					vmin = i;
 				}
 			}
-		}					//遍历完四个方向点
-
+		}	//遍历完四个方向点
 
 		if (vmin == -1){			//没找到满足条件的方向点	
 			return false;			//返回false，未找到可走的点
 		}
-
 		if (visWhat(&vlist, vdir[vmin].row, vdir[vmin].col) == space || visWhat(&vlist, vdir[vmin].row, vdir[vmin].col) == snake){
 			vsnake_move(&vlist, &rear, vdir[vmin].row, vdir[vmin].col);		//若为space，移动虚拟蛇；若为snake，表示该点为蛇尾，移动虚拟蛇
 		}
 		else{																//该点为food，头插法插入该点到虚拟蛇
-			struct SnakeNode* pNew = (struct SnakeNode*)malloc(sizeof(struct SnakeNode));		//申请一个新的结点
+			struct SnakeNode* pNew = (struct SnakeNode*)malloc(sizeof(struct SnakeNode));	
 			pNew->pos.row = vdir[vmin].row;
 			pNew->pos.col = vdir[vmin].col;
-			//pNew->next = NULL;		//视频中没写这句
 			pNew->next = vlist->next;
 			vlist->next = pNew;
 		}
-		//system("cls");
-		//printf("写入路径中");
+
 		movepoint[index].row = vdir[vmin].row;		//将走过的点记录在数组中
 		movepoint[index].col = vdir[vmin].col;
 		index++;
-		if (index > 20000){
+		if (index > 20000){			//设置极限值，当记录的点超过20000个，返回false
 			//printf("找了很久没找到，直接返回");
 			//Sleep(700);
 			return false;
 		}
 	}
 
-	//判断此时虚拟蛇能否找到蛇尾
-	snakefood.row = rear->pos.row;
+	//判断此时虚拟蛇能否找到尾巴食物
+	snakefood.row = rear->pos.row;		//设置虚拟蛇的尾巴为尾巴食物
 	snakefood.col = rear->pos.col;
 	if (vsnakefand(&vlist, &rear)){
 		movepoint[index].row = -1;		//标记位，真实蛇只走 存储点（-1，-1）之前的所存的点
 		movepoint[index].col = -1;
-		//printf("虚拟蛇吃到食物后找到尾巴了，我要告诉真实蛇了，让它去吃食物");
-		//Sleep(5000);
-		//printf("虚拟蛇吃完食物找到路径\n");
-		//Sleep(5000);
 		return true;
 	}
 	else{
-		//printf("虚拟蛇吃到食物后未找到尾巴，我要告诉真实蛇，让它先别去吃食物，换个安全的位置再吃");
-		//Sleep(5000);
-		//printf("虚拟蛇吃完食物未找到路径\n");
-		//Sleep(5000);
-		return false;
+		return false;			//未找到尾巴食物
 	}
 }
 
 
 bool vsnakefand(snakeNode** vlist, snakeNode**rear){		//虚拟蛇找尾巴食物
 	Point vdir[4] = { 0 };		//存储蛇头的上下左右位置坐标的数组,0上  1右  2下  3左
-	while ((*vlist)->next->pos.row != snakefood.row || (*vlist)->next->pos.col != snakefood.col){		//虚拟蛇的蛇头是否到达最初记录的蛇尾位置
-		int vminH = ROW + COL;				//设置一个H值标志，默认为最大的H，以便找到四个方向中有最小H值的点
-		int vmin = -1;						//记录以找到的有最小H值的点，默认为-1，若vmin值未改变则证明未找到可走的点
+	while ((*vlist)->next->pos.row != snakefood.row || (*vlist)->next->pos.col != snakefood.col){	//当虚拟蛇的蛇头到达尾巴食物跳出循环
+		int vminH = ROW + COL;				
+		int vmin = -1;						
 
 		//添加上右下左的坐标
 		for (int i = 0; i < 4; i++){
@@ -592,8 +578,6 @@ bool vsnakefand(snakeNode** vlist, snakeNode**rear){		//虚拟蛇找尾巴食物
 		for (int n = 0; n < 4; n++){
 			int i = *(number + n);
 			if ((vdir[i].row != snakefood.row || vdir[i].col != snakefood.col) && (visWhat(&*vlist, vdir[i].row, vdir[i].col) == snake || visWhat(&*vlist, vdir[i].row, vdir[i].col) == wall)){	//若该点不是尾巴食物snakefood 且 是虚拟蛇身或墙 则跳过
-				//printf("跳过！！(%d,%d)", vdir[i].row, vdir[i].col);
-				//Sleep(1000);
 				continue;
 			}
 			int H = abs(vdir[i].row - snakefood.row) + abs(vdir[i].col - snakefood.col);		//计算H值
@@ -603,11 +587,9 @@ bool vsnakefand(snakeNode** vlist, snakeNode**rear){		//虚拟蛇找尾巴食物
 			}
 		}
 		if (vmin == -1){
-			//printf("现在在虚拟蛇找尾巴食物当中，未找到，我要返回了");
-			//Sleep(5000);
 			snakefood.row = -1;	//重置snakefood
 			snakefood.col = -1;
-			return false;		//未找到可走的点
+			return false;		//未找到尾巴食物
 		}
 		vsnake_move(&*vlist, &*rear, vdir[vmin].row, vdir[vmin].col);		//找到可走的一个点，移动虚拟蛇
 	}
@@ -636,7 +618,7 @@ bool vsnake_have_space(int row, int col){
 	Point exam[4] = { 0 };
 	for (int i = 0; i < 4; i++){
 		switch (i){
-		case 0: exam[i].row = vlist->next->pos.row - 1; 	exam[i].col = vlist->next->pos.col;	break;			/////改改
+		case 0: exam[i].row = vlist->next->pos.row - 1; 	exam[i].col = vlist->next->pos.col;	break;	
 		case 1: exam[i].row = vlist->next->pos.row;		exam[i].col = vlist->next->pos.col + 1;	break;
 		case 2: exam[i].row = vlist->next->pos.row + 1; 	exam[i].col = vlist->next->pos.col;	break;
 		case 3: exam[i].row = vlist->next->pos.row;		exam[i].col = vlist->next->pos.col - 1;	break;
@@ -646,8 +628,8 @@ bool vsnake_have_space(int row, int col){
 	for (int n = 0; n < 4; n++){
 		int i = *(number + n);
 		if (visWhat(&vlist, exam[i].row, exam[i].col) == space || visWhat(&vlist, exam[i].row, exam[i].col) == food){
-			return true;
+			return true;	//若该方向点为food或space，则返回true
 		}
 	}
-	return false;
+	return false;			//四个方向点皆不是food或space
 }
